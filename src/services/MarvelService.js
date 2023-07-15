@@ -14,9 +14,9 @@ class MarvelService {
     return await res.json();
   }
 
-  getAllCharacters = () => {
-    return this.getResource(`${this._apiBase}characters?limit=9&offset=210&apikey=${Credentials.publick_key}
-`);
+  getAllCharacters = async () => {
+    const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=210&apikey=${Credentials.publick_key}`);
+    return res.data.results.map(this._transformCharacter);
   }
 
   getCharacter = async (id) => {
@@ -26,6 +26,7 @@ class MarvelService {
 
   _transformCharacter = (char) => {
     return {
+      id: char.id,
       name: char.name,
       description: char.description,
       thumbnail: char.thumbnail.path + '.' + char.thumbnail.extension,
