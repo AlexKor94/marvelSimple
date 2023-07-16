@@ -4,30 +4,35 @@ import Spinner from '../spinner/Spinner';
 import MarvelService from '../../services/MarvelService';
 
 import './charList.scss';
-import abyss from '../../resources/img/abyss.jpg';
+// import abyss from '../../resources/img/abyss.jpg';
 
 //<li className="char__item char__item_selected">
 
 class CharList extends Component {
 
     state = {
-        characters: []
+        characters: [],
+        loading: true
     }
 
     componentDidMount() {
         const marvelService = new MarvelService();
         marvelService.getAllCharacters().then(res => {
             this.setState({
-                characters: res
+                characters: res,
+                loading: false
             })
         });
     }
 
     render() {
+        const { characters, loading } = this.state;
+        const spinner = loading ? <Spinner /> : null;
         return (
             <div className="char__list">
+                {spinner}
                 <ul className="char__grid">
-                    <CreateCards characters={this.state.characters} />
+                    <CreateCards characters={characters} />
                 </ul>
                 <button className="button button__main button__long">
                     <div className="inner">load more</div>
