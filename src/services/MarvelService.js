@@ -3,6 +3,7 @@ import * as Credentials from './credential.json';
 
 class MarvelService {
   _apiBase = 'https://gateway.marvel.com:443/v1/public/';
+  _baseOffset = 210;
 
   getResource = async (url) => {
     const res = await fetch(url);
@@ -14,8 +15,9 @@ class MarvelService {
     return await res.json();
   }
 
-  getAllCharacters = async () => {
-    const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=210&apikey=${Credentials.publick_key}`);
+  getAllCharacters = async (offset = this._baseOffset) => {
+    console.log(`${this._apiBase}characters?limit=9&offset=${offset}&apikey=${Credentials.publick_key}`);
+    const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=${offset}&apikey=${Credentials.publick_key}`);
     return res.data.results.map(this._transformCharacter);
   }
 

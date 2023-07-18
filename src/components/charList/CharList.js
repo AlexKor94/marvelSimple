@@ -14,21 +14,39 @@ class CharList extends Component {
     state = {
         characters: [],
         loading: true,
-        err: false
+        err: false,
+        newItemLoading: false,
+        offset: 210
     }
 
+    marvelService = new MarvelService();
+
     componentDidMount() {
-        const marvelService = new MarvelService();
-        marvelService.getAllCharacters().then(res => {
-            this.onLoaded(res);
-        }).catch(err => this.onError());
+        this.onRequest();
+    }
+
+    onRequest = (offset) => {
+        this.onLoading();
+        this.marvelService.getAllCharacters(offset)
+            .then(res => {
+                this.onLoaded(res);
+            })
+            .catch(err => this.onError());
+    }
+
+    onLoading = () => {
+        this.setState({
+            newItemLoading: true
+        })
     }
 
     onLoaded(res) {
-        this.setState({
-            characters: res,
-            loading: false
-        })
+        this.setState(({ offset, characters }) => ({
+            characters: [...characters, ...res],
+            loading: false,
+            newItemLoading: false,
+            offset: offset + 9
+        }))
     }
 
     onError() {
@@ -39,7 +57,7 @@ class CharList extends Component {
     }
 
     render() {
-        const { characters, loading, err } = this.state;
+        const { characters, loading, err, offset, newItemLoading } = this.state;
         const spinner = loading ? <Spinner /> : null;
         const error = err ? <ErrorMessage /> : null;
         return (
@@ -49,8 +67,11 @@ class CharList extends Component {
                 <ul className="char__grid">
                     <CreateCards characters={characters} onCharSelected={this.props.onCharSelected} />
                 </ul>
-                <button className="button button__main button__long">
-                    <div className="inner">load more</div>
+                <button
+                    className="button button__main button__long"
+                    disabled={newItemLoading}
+                    onClick={() => this.onRequest(offset)}>
+                    <div className="inner">{newItemLoading ? 'Loading' : 'load more'}</div>
                 </button>
             </div>
         );
