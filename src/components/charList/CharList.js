@@ -4,6 +4,7 @@ import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import MarvelService from '../../services/MarvelService';
 
+import PropTypes from 'prop-types';
 import './charList.scss';
 // import abyss from '../../resources/img/abyss.jpg';
 
@@ -108,6 +109,10 @@ const CreateCards = ({ characters, onCharSelected }) => {
     });
 
     return items;
+}
+
+CharList.propTypes = {
+    onCharSelected: PropTypes.func.isRequired
 }
 
 export default CharList;
