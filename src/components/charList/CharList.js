@@ -1,3 +1,10 @@
+// Логіка має бути наступна:
+
+// 1. При зміні фокусу картка виділяється.Стандартне виділення потрібно замінити на більш виразне.
+// 2. При натискані ENTER або кліком лівою кнопкою миші потрібно додавати до картки класс "char__item_selected", картка має завантажитись з права.
+// 3. У блоці карток користувачу надати можливість змінювати фокус не лише клавішою TAB, а і стрілками.
+
+
 import { Component } from 'react';
 
 import Spinner from '../spinner/Spinner';
@@ -73,6 +80,7 @@ class CharList extends Component {
 
             return (
                 < li
+                    tabIndex={0}
                     className="char__item"
                     key={character.id}
                     onClick={() => onCharSelected(character.id)}>
