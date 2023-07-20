@@ -78,8 +78,11 @@ class CharList extends Component {
 
     focusOnItem = (id) => {
         this.itemsRef.forEach(item => item.classList.remove('char__item_selected'));
-        this.itemsRef[id].classList.add('char__item_selected');
-        this.itemsRef[id].focus();
+        if (id < this.itemsRef.length && id > -1) {
+            this.itemsRef[id].classList.add('char__item_selected');
+            this.itemsRef[id].focus();
+        }
+
     }
 
     createCards(characters, onCharSelected) {
@@ -104,6 +107,10 @@ class CharList extends Component {
                         if (e.key === '' || e.key === 'Enter') {
                             this.props.onCharSelected(character.id);
                             this.focusOnItem(i);
+                        } else if (e.key === 'ArrowRight') {
+                            this.focusOnItem(i + 1);
+                        } else if (e.key === 'ArrowLeft') {
+                            this.focusOnItem(i - 1);
                         }
                     }}>
                     <img
