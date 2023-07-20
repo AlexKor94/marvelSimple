@@ -111,6 +111,10 @@ class CharList extends Component {
                             this.focusOnItem(i + 1);
                         } else if (e.key === 'ArrowLeft') {
                             this.focusOnItem(i - 1);
+                        } else if (e.key === 'ArrowUp') {
+                            this.focusOnItem(i - 3);
+                        } else if (e.key === 'ArrowDown') {
+                            this.focusOnItem(i + 3);
                         }
                     }}>
                     <img
