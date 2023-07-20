@@ -79,7 +79,6 @@ class CharList extends Component {
     focusOnItem = (id) => {
         this.itemsRef.forEach(item => item.classList.remove('char__item_selected'));
         if (id < this.itemsRef.length && id > -1) {
-            this.itemsRef[id].classList.add('char__item_selected');
             this.itemsRef[id].focus();
         }
 
@@ -102,11 +101,13 @@ class CharList extends Component {
                     onClick={() => {
                         onCharSelected(character.id);
                         this.focusOnItem(i);
+                        this.itemsRef[i].classList.add('char__item_selected');
                     }}
                     onKeyDown={(e) => {
                         if (e.key === '' || e.key === 'Enter') {
                             this.props.onCharSelected(character.id);
                             this.focusOnItem(i);
+                            this.itemsRef[i].classList.add('char__item_selected');
                         } else if (e.key === 'ArrowRight') {
                             this.focusOnItem(i + 1);
                         } else if (e.key === 'ArrowLeft') {

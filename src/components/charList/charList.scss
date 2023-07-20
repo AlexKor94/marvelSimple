@@ -34,10 +34,14 @@
         }
         &:focus {
             border: 5px solid $main-color;
+            
             img {
-                    width: 190px;
-                    height: 200px;
+                width: 190px;
+                height: 200px;
                 }
+            .char__name{
+                font-size: 20px;
+            }
         }
     }
     &__name {
