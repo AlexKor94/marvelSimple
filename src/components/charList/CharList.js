@@ -5,7 +5,7 @@
 // 3. У блоці карток користувачу надати можливість змінювати фокус не лише клавішою TAB, а і стрілками.
 
 
-import { Component } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -13,78 +13,74 @@ import MarvelService from '../../services/MarvelService';
 
 import PropTypes from 'prop-types';
 import './charList.scss';
-// import abyss from '../../resources/img/abyss.jpg';
 
-//<li className="char__item char__item_selected">
+const CharList = (props) => {
+    const [characters, setCharacters] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [err, setErr] = useState(false);
+    const [newItemLoading, setNewItemLoading] = useState(false);
+    const [offset, setOffset] = useState(210);
+    const [charEnded, setCharEnded] = useState(false);
 
-class CharList extends Component {
-    state = {
-        characters: [],
-        loading: true,
-        err: false,
-        newItemLoading: false,
-        offset: 210,
-        charEnded: false
-    }
+    // state = {
+    //     characters: [],
+    //     loading: true,
+    //     err: false,
+    //     newItemLoading: false,
+    //     offset: 210,
+    //     charEnded: false
+    // }
 
-    marvelService = new MarvelService();
+    const marvelService = new MarvelService();
 
-    componentDidMount() {
-        this.onRequest();
-    }
+    useEffect(() => {
+        onRequest();
+    }, []);
 
-    onRequest = (offset) => {
-        this.onLoading();
-        this.marvelService.getAllCharacters(offset)
+    const onRequest = (offset) => {
+        onLoading();
+        marvelService.getAllCharacters(offset)
             .then(res => {
-                this.onLoaded(res);
+                onLoaded(res);
             })
-            .catch(err => this.onError());
+            .catch(err => onError());
     }
 
-    onLoading = () => {
-        this.setState({
-            newItemLoading: true
-        })
+    const onLoading = () => {
+        setNewItemLoading(true);
     }
 
-    onLoaded(res) {
+    const onLoaded = (res) => {
         let ended = false;
         if (res.length < 9) {
             ended = true;
         }
 
-        this.setState(({ offset, characters }) => ({
-            characters: [...characters, ...res],
-            loading: false,
-            newItemLoading: false,
-            offset: offset + 9,
-            charEnded: ended
-        }))
+        setCharacters(characters => [...characters, ...res]);
+        setLoading(false);
+        setNewItemLoading(newItemLoading => false);
+        setOffset(offset => offset + 9);
+        setCharEnded(charEnded => ended);
     }
 
-    onError() {
-        this.setState({
-            loading: false,
-            err: true
-        })
+    const onError = () => {
+        setErr(true);
+        setLoading(false);
     }
 
-    itemsRef = [];
+    const itemsRef = useRef([]);
 
-    setRef = (ref) => {
-        this.itemsRef.push(ref);
-    }
-
-    focusOnItem = (id) => {
-        this.itemsRef.forEach(item => item.classList.remove('char__item_selected'));
-        if (id < this.itemsRef.length && id > -1) {
-            this.itemsRef[id].focus();
+    const focusOnItem = (id) => {
+        itemsRef.current.forEach(item => {
+            item.classList.remove('char__item_selected')
+        });
+        if (id < itemsRef.current.length && id > -1) {
+            itemsRef.current[id].focus();
         }
 
     }
 
-    createCards(characters, onCharSelected) {
+    function createCards(characters, onCharSelected) {
         const items = characters.map((character, i) => {
 
             let imgStyle = { 'objectFit': 'cover' };
@@ -97,25 +93,25 @@ class CharList extends Component {
                     tabIndex={0}
                     className="char__item"
                     key={character.id}
-                    ref={this.setRef}
+                    ref={el => itemsRef.current[i] = el}
                     onClick={() => {
                         onCharSelected(character.id);
-                        this.focusOnItem(i);
-                        this.itemsRef[i].classList.add('char__item_selected');
+                        focusOnItem(i);
+                        itemsRef.current[i].classList.add('char__item_selected');
                     }}
                     onKeyDown={(e) => {
                         if (e.key === '' || e.key === 'Enter') {
-                            this.props.onCharSelected(character.id);
-                            this.focusOnItem(i);
-                            this.itemsRef[i].classList.add('char__item_selected');
+                            props.onCharSelected(character.id);
+                            focusOnItem(i);
+                            itemsRef.current[i].classList.add('char__item_selected');
                         } else if (e.key === 'ArrowRight') {
-                            this.focusOnItem(i + 1);
+                            focusOnItem(i + 1);
                         } else if (e.key === 'ArrowLeft') {
-                            this.focusOnItem(i - 1);
+                            focusOnItem(i - 1);
                         } else if (e.key === 'ArrowUp') {
-                            this.focusOnItem(i - 3);
+                            focusOnItem(i - 3);
                         } else if (e.key === 'ArrowDown') {
-                            this.focusOnItem(i + 3);
+                            focusOnItem(i + 3);
                         }
                     }}>
                     <img
@@ -131,27 +127,26 @@ class CharList extends Component {
         return items;
     }
 
-    render() {
-        const { characters, loading, err, offset, newItemLoading, charEnded } = this.state;
-        const spinner = loading ? <Spinner /> : null;
-        const error = err ? <ErrorMessage /> : null;
-        return (
-            <div className="char__list">
-                {error}
-                {spinner}
-                <ul className="char__grid">
-                    {this.createCards(characters, this.props.onCharSelected)}
-                </ul>
-                <button
-                    className="button button__main button__long"
-                    disabled={newItemLoading}
-                    style={{ 'display': charEnded ? "none" : "block" }}
-                    onClick={() => this.onRequest(offset)}>
-                    <div className="inner">{newItemLoading ? 'Loading' : 'load more'}</div>
-                </button>
-            </div>
-        );
-    }
+
+    const spinner = loading ? <Spinner /> : null;
+    const error = err ? <ErrorMessage /> : null;
+    return (
+        <div className="char__list">
+            {error}
+            {spinner}
+            <ul className="char__grid">
+                {createCards(characters, props.onCharSelected)}
+            </ul>
+            <button
+                className="button button__main button__long"
+                disabled={newItemLoading}
+                style={{ 'display': charEnded ? "none" : "block" }}
+                onClick={() => onRequest(offset)}>
+                <div className="inner">{newItemLoading ? 'Loading' : 'load more'}</div>
+            </button>
+        </div>
+    );
+
 }
 
 CharList.propTypes = {
