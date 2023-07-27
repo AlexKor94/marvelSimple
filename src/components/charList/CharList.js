@@ -4,50 +4,34 @@
 // 2. При натискані ENTER або кліком лівою кнопкою миші потрібно додавати до картки класс "char__item_selected", картка має завантажитись з права.
 // 3. У блоці карток користувачу надати можливість змінювати фокус не лише клавішою TAB, а і стрілками.
 
-
 import { useState, useEffect, useRef } from 'react';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import PropTypes from 'prop-types';
 import './charList.scss';
 
 const CharList = (props) => {
     const [characters, setCharacters] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [err, setErr] = useState(false);
     const [newItemLoading, setNewItemLoading] = useState(false);
     const [offset, setOffset] = useState(210);
     const [charEnded, setCharEnded] = useState(false);
 
-    // state = {
-    //     characters: [],
-    //     loading: true,
-    //     err: false,
-    //     newItemLoading: false,
-    //     offset: 210,
-    //     charEnded: false
-    // }
-
-    const marvelService = new MarvelService();
+    const { loading, error, getAllCharacters } = useMarvelService();
 
     useEffect(() => {
         onRequest();
     }, []);
 
     const onRequest = (offset) => {
-        onLoading();
-        marvelService.getAllCharacters(offset)
+        setNewItemLoading(true);
+        getAllCharacters(offset)
             .then(res => {
                 onLoaded(res);
-            })
-            .catch(err => onError());
-    }
+            });
 
-    const onLoading = () => {
-        setNewItemLoading(true);
     }
 
     const onLoaded = (res) => {
@@ -57,15 +41,9 @@ const CharList = (props) => {
         }
 
         setCharacters(characters => [...characters, ...res]);
-        setLoading(false);
         setNewItemLoading(newItemLoading => false);
         setOffset(offset => offset + 9);
         setCharEnded(charEnded => ended);
-    }
-
-    const onError = () => {
-        setErr(true);
-        setLoading(false);
     }
 
     const itemsRef = useRef([]);
@@ -129,10 +107,10 @@ const CharList = (props) => {
 
 
     const spinner = loading ? <Spinner /> : null;
-    const error = err ? <ErrorMessage /> : null;
+    const err = error ? <ErrorMessage /> : null;
     return (
         <div className="char__list">
-            {error}
+            {err}
             {spinner}
             <ul className="char__grid">
                 {createCards(characters, props.onCharSelected)}
