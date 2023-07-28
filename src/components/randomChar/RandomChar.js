@@ -10,7 +10,6 @@ const RandomChar = (props) => {
     const [char, setChar] = useState({});
     const { loading, error, getCharacter, clearError } = useMarvelService();
 
-
     useEffect(() => {
         updateChar();
     }, [props.char])

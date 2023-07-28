@@ -9,6 +9,7 @@ export const useHttp = () => {
 
     try {
       const response = await fetch(url, { method, body, headers });
+
       if (!response.ok) {
         throw new Error(`Could not fetch ${url}, status: ${response.status} `);
       }
@@ -17,12 +18,14 @@ export const useHttp = () => {
       return data;
     } catch (e) {
       setLoading(false);
-      setError(e.massage);
+      setError(e.message);
       throw e;
     }
   }, []);
 
   const clearError = useCallback(() => setError(null), []);
+
+  console.log(error);
 
   return { loading, request, error, clearError };
 }
