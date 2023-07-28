@@ -22,9 +22,7 @@ const ComicsList = (props) => {
     const onRequest = (offset, initial) => {
         initial ? setNewItemLoading(false) : setNewItemLoading(true);
         getAllComics(offset)
-            .then(res => {
-                onLoaded(res);
-            });
+            .then(onLoaded);
     }
 
 
