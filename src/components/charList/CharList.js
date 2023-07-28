@@ -22,11 +22,11 @@ const CharList = (props) => {
     const { loading, error, getAllCharacters } = useMarvelService();
 
     useEffect(() => {
-        onRequest();
+        onRequest(offset, true);
     }, []);
 
-    const onRequest = (offset) => {
-        setNewItemLoading(true);
+    const onRequest = (offset, initial) => {
+        initial ? setNewItemLoading(false) : setNewItemLoading(true);
         getAllCharacters(offset)
             .then(res => {
                 onLoaded(res);
@@ -106,7 +106,7 @@ const CharList = (props) => {
     }
 
 
-    const spinner = loading ? <Spinner /> : null;
+    const spinner = loading && !newItemLoading ? <Spinner /> : null;
     const err = error ? <ErrorMessage /> : null;
     return (
         <div className="char__list">
