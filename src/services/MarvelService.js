@@ -24,7 +24,7 @@ const useMarvelService = () => {
   }
 
   const getComic = async (id) => {
-    const res = await request(`${_apiBase}comics/${id}?${Credentials.publick_key}`);
+    const res = await request(`${_apiBase}comics/${id}?apikey=${Credentials.publick_key}`);
     return _transformComics(res.data.results[0]);
   };
 
@@ -55,7 +55,7 @@ const useMarvelService = () => {
         : "not available",
     }
   }
-  return { loading, error, getAllCharacters, getCharacter, getAllComics, clearError }
+  return { loading, error, getAllCharacters, getCharacter, getAllComics, getComic, clearError }
 }
 
 export default useMarvelService;
