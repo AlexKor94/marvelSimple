@@ -9,21 +9,32 @@ import useMarvelService from '../../services/MarvelService';
 import './comicsList.scss';
 
 const ComicsList = (props) => {
-    const [comics, setComics] = useState([]);
+    const storageOffset = Number(sessionStorage.getItem('storageOffset'));
+    const storageComicsList = JSON.parse(sessionStorage.getItem('storageComicsList'));
+
+    const [comics, setComics] = useState(!storageComicsList ? [] : storageComicsList);
     const [newItemLoading, setNewItemLoading] = useState(false);
     const [comicsEnded, setComicsEnded] = useState(false);
-    const [offset, setOffset] = useState(0);
+    const [offset, setOffset] = useState(!storageOffset ? 0 : storageOffset);
 
-    const { loading, error, getAllComics, clearError } = useMarvelService();
+    const { loading, error, getAllComics } = useMarvelService();
 
     useEffect(() => {
         onRequest(offset, true);
     }, []);
 
+    const returnScrollPosition = () => {
+        const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+        if (savedScrollPosition) {
+            window.scrollTo(0, savedScrollPosition);
+        }
+    }
+
     const onRequest = (offset, initial) => {
         initial ? setNewItemLoading(false) : setNewItemLoading(true);
         getAllComics(offset)
-            .then(onLoaded);
+            .then(onLoaded)
+            .then(returnScrollPosition);
     }
 
 
@@ -37,6 +48,8 @@ const ComicsList = (props) => {
         setComics(comics => [...comics, ...res]);
         setNewItemLoading(newItemLoading => false);
         setOffset(offset => offset + 8);
+        sessionStorage.setItem('storageOffset', offset);
+        sessionStorage.setItem('storageComicsList', JSON.stringify(comics));
         setComicsEnded(comicsEnded => ended);
 
     }
@@ -72,6 +85,11 @@ const ComicsList = (props) => {
                 }
             }
 
+            const saveScrollPosition = () => {
+                const scrollPosition = window.scrollY + 100 || document.documentElement.scrollTop;
+                sessionStorage.setItem('scrollPosition', scrollPosition);
+            }
+
             return (
                 <li
                     className="comics__item"
@@ -79,7 +97,7 @@ const ComicsList = (props) => {
                     key={i}
                     ref={el => itemsRef.current[i] = el}
                     onKeyDown={(e) => onKeyPress(e)}>
-                    <Link to={`/comics/${comic.id}`}>
+                    <Link to={`/comics/${comic.id}`} onClick={saveScrollPosition}>
                         <img src={comic.thumbnail} alt={comic.title} className="comics__item-img" style={imgStyle} />
                         <div className="comics__item-name">{comic.title}</div>
                         <div className="comics__item-price">{comic.price}</div>
