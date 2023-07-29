@@ -1,5 +1,6 @@
 
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -78,11 +79,11 @@ const ComicsList = (props) => {
                     key={i}
                     ref={el => itemsRef.current[i] = el}
                     onKeyDown={(e) => onKeyPress(e)}>
-                    <a href={comic.url}>
+                    <Link to={`/comics/${comic.id}`}>
                         <img src={comic.thumbnail} alt={comic.title} className="comics__item-img" style={imgStyle} />
                         <div className="comics__item-name">{comic.title}</div>
                         <div className="comics__item-price">{comic.price ? comic.price + '$' : 'NOT AVAILABLE'}</div>
-                    </a>
+                    </Link>
                 </li>
 
             )
