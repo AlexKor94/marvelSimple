@@ -1,0 +1,30 @@
+@import '../../style/variables.scss';
+.search__form {
+  margin-top: 30px;
+  padding: 25px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  &-selected {
+    color: #000;
+    font-family: Roboto Condensed;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  &_container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+    &-input {
+      width: 250px;
+      height: 38px;
+      box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+      border: none;
+      color: $grey;
+      font-family: Roboto Condensed;
+      font-size: 14px;
+      font-weight: 400;
+      padding-left: 10px;
+    }
+  }
+}
