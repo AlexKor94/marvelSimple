@@ -28,6 +28,13 @@ const useMarvelService = () => {
     return _transformComics(res.data.results[0]);
   };
 
+  const findCharacterByFullName = async (fullName) => {
+    //CHTHON
+    const res = await request(`${_apiBase}characters?name=${fullName}&apikey=${Credentials.publick_key}`);
+    const characters = res.data.results;
+    return characters.length > 0 ? _transformCharacter(characters[0]) : null;
+  }
+
   const _transformCharacter = (char) => {
     return {
       id: char.id,
@@ -55,7 +62,7 @@ const useMarvelService = () => {
         : "not available",
     }
   }
-  return { loading, error, getAllCharacters, getCharacter, getAllComics, getComic, clearError }
+  return { loading, error, getAllCharacters, getCharacter, findCharacterByFullName, getAllComics, getComic, clearError }
 }
 
 export default useMarvelService;
