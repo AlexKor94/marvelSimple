@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import './charList.scss';
 
 const CharList = (props) => {
+
     const [characters, setCharacters] = useState([]);
     const [newItemLoading, setNewItemLoading] = useState(false);
     const [offset, setOffset] = useState(210);

@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -10,29 +10,45 @@ import './searchForm.scss';
 
 const SearchForm = () => {
   const [resultText, setResultText] = useState('');
-  const { findCharacterByFullName, clearError } = useMarvelService();
+  const [msg, setMsg] = useState(null);
+  const { findCharacterByFullName, error, clearError } = useMarvelService();
 
-  const onSearch = async (e) => {
-    e.preventDefault();
-    const name = e.target[0].value;
+  const formik = useFormik({
+    initialValues: {
+      nameCharacter: ''
+    },
+    validationSchema: Yup.object({
+      nameCharacter: Yup.string().min(3, "Enter minimum 3 symbols").required("This field is required")
+    }),
+    onSubmit: values => onSearch(values.nameCharacter),
+  })
+
+  useEffect(() => {
+    setMsg(formik.errors.nameCharacter);
+  }, [formik.errors.nameCharacter]);
+
+  const onSearch = async (name) => {
+    clearError();
     const result = await findCharacterByFullName(name);
-    console.log(result);
+    result ? setMsg(`There is! Visit ${name} page?`) : setMsg('The character was not found. Check the name and try again');
   }
 
   return (
     <div className="search__form">
       <p className='search__form-selected'>Or find a character by name:</p>
-      <form className="search__form_container" onSubmit={onSearch}>
+      <form className="search__form_container" onSubmit={formik.handleSubmit}>
         <input
           name='nameCharacter'
           type="text"
           className="search__form_container-input"
           placeholder="Enter name"
+          onChange={formik.handleChange}
         />
-        <button className="search__form_container-btn button button__main">
+        <button type="submit" className="search__form_container-btn button button__main">
           <div className="inner">find</div>
         </button>
       </form>
+      <div className="search__form-result" style={!formik.isValid || error ? { color: 'red' } : { color: 'green' }}>{msg}</div>
     </div>
   )
 }
