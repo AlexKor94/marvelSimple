@@ -11,7 +11,6 @@ const SingleComicPage = lazy(() => import('../pages/SingleComicPage'));
 const SingleCharacterPage = lazy(() => import('../pages/singleCharacterPage/SingleCharacterPage'));
 
 
-
 const App = () => {
 
     return (
@@ -30,7 +29,6 @@ const App = () => {
                     </Suspense>
                 </main>
             </div>
-
         </Router>
     );
 

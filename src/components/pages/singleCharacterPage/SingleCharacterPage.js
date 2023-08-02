@@ -1,11 +1,27 @@
 
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
-const SingleCharacterPage = () => {
+import './singleCharacterPage.scss';
+
+const SingleCharacterPage = (props) => {
+  const character = useLocation().state;
+  useEffect(() => console.log(character), []);
+
+  let imgStyle = { 'objectFit': 'cover' };
+  if (character.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
+    imgStyle = { 'objectFit': 'unset' };
+  }
+
   return (
-    <div>
-      <p style={{ 'textAlign': 'center', 'fontWeight': 'bold', 'fontSize': '24px' }}>Page doesn't exist</p>
-      <Link style={{ 'display': 'block', 'textAlign': 'center', 'fontWeight': 'bold', 'fontSize': '24px', 'marginTop': '30px' }} to="/">Back to main page</Link>
+    <div className='single__character'>
+      <div className="single__character-img">
+        <img src={character.thumbnail} alt={character.name} style={imgStyle} />
+      </div>
+      <div className="single__character-about">
+        <h1 className="single__characte-title">{character.name}</h1>
+        <div className="single__characte-description">{character.description}</div>
+      </div>
     </div>
   )
 }

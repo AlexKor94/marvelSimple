@@ -37,7 +37,6 @@ const ComicsList = (props) => {
             .then(returnScrollPosition);
     }
 
-
     const onLoaded = (res) => {
         let ended = false;
 
