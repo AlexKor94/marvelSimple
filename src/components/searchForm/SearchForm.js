@@ -66,7 +66,7 @@ const SearchForm = () => {
 
       <div
         className="search__form-result"
-        style={!formik.isValid || error ? { color: 'red' } : { color: 'green' }}
+        style={!formik.isValid || error || !character ? { color: 'red' } : { color: 'green' }}
       >{character ? link : msg}
       </div>
     </div>
