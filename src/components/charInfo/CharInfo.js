@@ -29,16 +29,16 @@ const CharInfo = (props) => {
         clearError();
         getCharacter(charId)
             .then(onCharLoaded)
-            .then(setProcess('confirmed'));
+            .then(() => setProcess('confirmed'));
     }
 
     const onCharLoaded = (char) => {
-        console.log(char);
+        // console.log(char);
         setChar(char);
     }
 
     const setContent = (process, char) => {
-        console.log(process, char);
+        // console.log(process, char);
         switch (process) {
             case 'waiting':
                 return <Skeleton />
@@ -57,7 +57,7 @@ const CharInfo = (props) => {
     // const errorMessage = error ? <ErrorMessage /> : null;
     // const spiner = loading ? <Spinner /> : null;
     // const content = !(loading || error || !char) ? <View char={char} /> : null;
-    console.log(char);
+    // console.log(char);
     return (
         <div className="char__info">
             {setContent(process, char)}
