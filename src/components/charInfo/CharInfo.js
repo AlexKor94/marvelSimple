@@ -1,10 +1,8 @@
 // control point
 import { useEffect, useState } from 'react';
 
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
-import Skeleton from '../skeleton/Skeleton';
 import useMarvelService from '../../services/MarvelService';
+import setContent from '../../utils/setContent';
 
 import PropTypes from 'prop-types';
 import './charInfo.scss';
@@ -37,21 +35,7 @@ const CharInfo = (props) => {
         setChar(char);
     }
 
-    const setContent = (process, char) => {
-        // console.log(process, char);
-        switch (process) {
-            case 'waiting':
-                return <Skeleton />
-            case 'loading':
-                return <Spinner />
-            case 'confirmed':
-                return <View char={char} />
-            case 'error':
-                return <ErrorMessage />
-            default:
-                throw new Error('Unexpected process state')
-        }
-    }
+
 
     // const skeleton = char || loading || error ? null : <Skeleton />;
     // const errorMessage = error ? <ErrorMessage /> : null;
@@ -60,7 +44,7 @@ const CharInfo = (props) => {
     // console.log(char);
     return (
         <div className="char__info">
-            {setContent(process, char)}
+            {setContent(process, View, char)}
             {/* {skeleton}
             {errorMessage}
             {spiner}
@@ -70,8 +54,8 @@ const CharInfo = (props) => {
 
 }
 
-const View = ({ char }) => {
-    const { name, description, thumbnail, homepage, wiki, comics } = char;
+const View = ({ data }) => {
+    const { name, description, thumbnail, homepage, wiki, comics } = data;
 
     const missComics = comics.length === 0 ? "Sorry, but I don't find any comics with this character" : null;
 
