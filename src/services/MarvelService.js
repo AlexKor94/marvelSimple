@@ -3,7 +3,7 @@ import * as Credentials from './credential.json';
 import useHttp from '../hooks/http.hook';
 
 const useMarvelService = () => {
-  const { loading, request, error, clearError } = useHttp();
+  const { loading, request, error, clearError, process, setProcess } = useHttp();
 
   const _apiBase = 'https://gateway.marvel.com:443/v1/public/';
   const _baseOffset = 210;
@@ -62,7 +62,18 @@ const useMarvelService = () => {
         : "not available",
     }
   }
-  return { loading, error, getAllCharacters, getCharacter, findCharacterByFullName, getAllComics, getComic, clearError }
+  return {
+    process,
+    setProcess,
+    loading,
+    error,
+    getAllCharacters,
+    getCharacter,
+    findCharacterByFullName,
+    getAllComics,
+    getComic,
+    clearError
+  }
 }
 
 export default useMarvelService;
