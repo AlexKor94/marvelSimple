@@ -42,11 +42,18 @@ const SearchForm = () => {
 
   }
 
-  const link = character ? <Link
-    to={`/character/${character.id}`}
-    state={character}
-    name='Alex'>{`There is! Visit ${character.name} page?`} </Link>
+  const link = character ? <div className="char__search-wrapper">
+    <div className="char__search-success">There is! Visit {character.name} page?</div>
+    <Link to={`/character/${character.id}`} state={character} className="button button__secondary">
+      <div className="inner">To page</div>
+    </Link>
+  </div>
     : null;
+
+  // <Link
+  //   to={`/character/${character.id}`}
+  //   state={character}
+  //   name='Alex'>{`There is! Visit ${character.name} page?`} </Link>
 
   return (
     <div className="search__form">
