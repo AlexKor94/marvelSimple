@@ -10,7 +10,7 @@ import './charInfo.scss';
 const CharInfo = (props) => {
     const [char, setChar] = useState(null);
 
-    const { loading, error, getCharacter, clearError, process, setProcess } = useMarvelService();
+    const { getCharacter, clearError, process, setProcess } = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -35,20 +35,9 @@ const CharInfo = (props) => {
         setChar(char);
     }
 
-
-
-    // const skeleton = char || loading || error ? null : <Skeleton />;
-    // const errorMessage = error ? <ErrorMessage /> : null;
-    // const spiner = loading ? <Spinner /> : null;
-    // const content = !(loading || error || !char) ? <View char={char} /> : null;
-    // console.log(char);
     return (
         <div className="char__info">
             {setContent(process, View, char)}
-            {/* {skeleton}
-            {errorMessage}
-            {spiner}
-            {content} */}
         </div>
     )
 
