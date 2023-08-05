@@ -3,7 +3,6 @@ import ErrorMessage from '../components/errorMessage/ErrorMessage';
 import Skeleton from '../components/skeleton/Skeleton';
 
 const setContent = (process, Component, data) => {
-  // console.log(process, char);
   switch (process) {
     case 'waiting':
       return <Skeleton />
