@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -42,18 +41,7 @@ const SearchForm = () => {
 
   }
 
-  const link = character ? <div className="char__search-wrapper">
-    <div className="char__search-success">There is! Visit {character.name} page?</div>
-    <Link to={`/character/${character.id}`} state={character} className="button button__secondary">
-      <div className="inner">To page</div>
-    </Link>
-  </div>
-    : null;
-
-  // <Link
-  //   to={`/character/${character.id}`}
-  //   state={character}
-  //   name='Alex'>{`There is! Visit ${character.name} page?`} </Link>
+  const link = character ? <ViewResult data={character} /> : null;
 
   return (
     <div className="search__form">
@@ -74,10 +62,22 @@ const SearchForm = () => {
       <div
         className="search__form-result"
         style={!formik.isValid || error || !character ? { color: 'red' } : { color: 'green' }}
-      >{character ? link : msg}
+      >
+        {character ? <ViewResult data={character} /> : msg}
       </div>
     </div>
   )
+}
+
+const ViewResult = ({ data }) => {
+  return (
+    <div className="char__search-wrapper">
+      <div className="char__search-success">There is! Visit {data.name} page?</div>
+      <Link to={`/character/${data.id}`} state={data} className="button button__secondary">
+        <div className="inner">To page</div>
+      </Link>
+    </div>
+  );
 }
 
 

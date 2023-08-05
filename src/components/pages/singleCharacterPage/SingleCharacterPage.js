@@ -1,13 +1,11 @@
 
-import { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
 import './singleCharacterPage.scss';
 
 const SingleCharacterPage = (props) => {
   const character = useLocation().state;
-  useEffect(() => console.log(character), []);
 
   let imgStyle = { 'objectFit': 'cover' };
   if (character.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
